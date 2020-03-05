@@ -1,4 +1,4 @@
-#pip install --upgrade pip
+pip install --upgrade pip
 pip install /storage/lacmus/ --user
 python /storage/lacmus/setup.py build_ext --inplace
 
