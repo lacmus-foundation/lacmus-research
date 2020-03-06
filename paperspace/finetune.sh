@@ -7,5 +7,5 @@ cd /storage/lacmus/
 pip install . --user
 python setup.py build_ext --inplace
 
-
-keras_retinanet/bin/train.py --epoch 1 --steps 10 --config config.ini pascal /storage/data/LADDV4_Full
+mkdir logs/test
+keras_retinanet/bin/train.py --epoch 1 --steps 100 --config config.ini --tensorboard-freq 1 --tensorboard-dir logs/test pascal /storage/data/LADDV4_Full >> logs/test/output.log
