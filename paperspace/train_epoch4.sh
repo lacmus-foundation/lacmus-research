@@ -14,5 +14,5 @@ keras_retinanet/bin/train.py --weights ./snapshots/resnet50_pascal_01.h5 --epoch
 
 mkdir /artifacts/combined_model_e4
 cp logs/combined_model_e4/* /artifacts/combined_model_e4/
-cp snapshots/resnet50_pascal_01.h5 /artifacts/combined_model_e3/funetuning_e4.h5  
+cp snapshots/resnet50_pascal_01.h5 /artifacts/combined_model_e4/funetuning_e4.h5  
 
