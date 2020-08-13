@@ -63,13 +63,19 @@ levels = 2 3 4 5
 | P2-P5 a8      |  0.4084   |  ![#f03c15](https://via.placeholder.com/15/ee3377/000000?text=+)           |
 
 
-*Classification loss*
+*Classification loss*  
+
+
 ![classification_loss](images/pyramid/classification_loss.svg)
 
-*Regression loss*
+*Regression loss*  
+
+
 ![regression_loss](images/pyramid/regression_loss.svg)
 
-*Total loss*
+*Total loss*  
+
+
 ![loss](images/pyramid/loss.svg)
 
 
