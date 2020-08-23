@@ -7,16 +7,21 @@ import argparse
 import cv2
 import numpy as np
 from openvino.inference_engine import IENetwork, IECore
-import json
 
 
 def parse_args(args):
     parser = argparse.ArgumentParser(description='convert model')
     parser.add_argument(
-        '--img',
-        help='path to image',
+        '--img_dir',
+        help='path to the dir with images',
         type=str,
         required=True
+    )
+    parser.add_argument(
+        '--img_list_path',
+        help='path to the file with test images names',
+        type=str,
+        required=False
     )
     parser.add_argument(
         '--bin',
@@ -30,13 +35,7 @@ def parse_args(args):
         type=str,
         required=True
     )
-    parser.add_argument(
-        '--count',
-        help='iference count',
-        type=int,
-        required=False,
-        default=3
-    )
+
     return parser.parse_args(args)
 
 
@@ -143,64 +142,20 @@ def create_blank(image, w, h, color=(0, 0, 0)):
     r_image[:image.shape[0],:image.shape[1],:image.shape[2]] = image
     return r_image
 
-def main(args=None):
-    args=parse_args(args)
-
-    model_xml = args.xml
-    model_bin = args.bin
-    img_fn = args.img
-    predict_count = args.count
-    
-    print("initialize OpenVino...")
-    OpenVinoIE = IECore()
-    print("available devices: ", OpenVinoIE.available_devices)
-    
-    OpenVinoIE.set_config({"CPU_BIND_THREAD": "YES"}, "CPU")
-
-    print("loading model...")
-    #net = IENetwork(model=model_xml, weights=model_bin)
-    net = OpenVinoIE.read_network(model=model_xml, weights=model_bin)
-    config = {}
-    OutputLayer = next(iter(net.outputs))
-    OpenVinoExecutable = OpenVinoIE.load_network(network=net, config=config, device_name="CPU")
-
-    input_blob = 'input_1'
-    net.batch_size = 1
-    shape = net.input_info[input_blob].input_data.shape
-    _, _, h, w = shape
-    print(f'model input shape: {shape}')
-
-
-    # load images
-    start_time = time.time()
-    image = cv2.imread(img_fn)
-    print("preprocess time {} s".format(time.time() - start_time))
-    image, scale = resize_image(image)
-    image = create_blank(image, w, h)
-    image = preprocess_image(image)
-
-    image = image.transpose((2, 0, 1))  # Change data layout from HWC to CHW
-    image = np.expand_dims(image, axis=0)
+def print_detections(image_path, detections, scale):
     labels_to_names = {0: 'Pedestrian'}
 
-    print(f'make {predict_count} predictions:')
-
-    for _ in range(0, predict_count):
-        start_time = time.time()
-        res = OpenVinoExecutable.infer(inputs={input_blob: image})
-        print("\t{} s".format(time.time() - start_time))
-    print("inference time {} s".format(time.time() - start_time))
-    
-    print("*"*20)
-    boxes, scores, labels = decode_openvino_detections(res[OutputLayer])
+    basename = os.path.basename(image_path)
+    print(basename + ":")
+    boxes, scores, labels = decode_openvino_detections(detections)
     print('bboxes:', boxes.shape)
     print('scores:', scores.shape)
     print('labels:', labels.shape)
-    
+
     boxes /= scale
     objects_count = 0
 
-    print("*"*20)
+    print("*" * 20)
     for box, score, label in zip(boxes[0], scores[0], labels[0]):
         # scores are sorted so we can break
         if score < 0.5:
@@ -212,6 +167,80 @@ def main(args=None):
         print(f'\tbox: {b[0]} {b[1]} {b[2]} {b[3]}')
         objects_count = objects_count + 1
     print(f'found objects: {objects_count}')
+
+def prepare_image(image, width, height):
+    image, scale = resize_image(image)
+    image = create_blank(image, width, height)
+    image = preprocess_image(image)
+    image = image.transpose((2, 0, 1))  # Change data layout from HWC to CHW
+    image = np.expand_dims(image, axis=0)
+    return image, scale
+
+def measure_simple_inference(images_list, model_xml, model_bin, input_key='input_1'):
+    core = IECore()
+    core.set_config({"CPU_BIND_THREAD": "YES"}, "CPU")
+    net = core.read_network(model=model_xml, weights=model_bin)
+    net.batch_size = 1
+    output = next(iter(net.outputs))
+
+    shape = net.input_info[input_key].input_data.shape
+    _, _, height, width = shape
+    config = {}
+    executable_net = core.load_network(network=net, config=config, device_name="CPU")
+
+    load_time = 0.0
+    preprocess_time = 0.0
+    infer_time = 0.0
+    latency_time = 0.0
+    detections = dict()
+    scales = dict()
+    print('Running network, please wait...')
+    start = time.time()
+    for image_path in images_list:
+        load_start = time.time()
+        image = cv2.imread(image_path)
+        load_end = time.time()
+        load_time += load_end - load_start
+
+        image, scales[image_path] = prepare_image(image, width, height)
+        preprocess_end = time.time()
+        preprocess_time += preprocess_end - load_end
+
+        res = executable_net.infer(inputs={input_key: image})
+        detections[image_path] = res[output]
+        infer_end = time.time()
+        infer_time += infer_end - preprocess_end
+        latency_time += infer_end - load_start
+
+    throughput_time = time.time() - start
+
+    for image_path in detections:
+        print_detections(image_path, detections[image_path], scales[image_path])
+        print()
+
+    img_count = len(images_list)
+    print('*' * 20)
+    print('latency: {} sec per image'.format(latency_time/img_count))
+    print('throughput: {} images per sec'.format(img_count / throughput_time))
+    print('avg load time: {} s'.format(load_time / img_count))
+    print('avg preprocess time: {} s'.format(preprocess_time / img_count))
+    print('avg inference time: {} s'.format(infer_time / img_count))
+
+
+def main(args=None):
+    args = parse_args(args)
+    model_xml = args.xml
+    model_bin = args.bin
+    images_dir = args.img_dir
+
+    if not args.img_list_path:
+        images_names = [f for f in os.listdir(images_dir) if os.path.isfile(os.path.join(images_dir, f))]
+    else:
+        with open(args.img_list) as f:
+            images_names = [img.strip() + '.jpg' for img in f.readlines()]
+
+    images_list = [os.path.join(images_dir, img) for img in images_names]
+    measure_simple_inference(images_list, model_xml, model_bin)
 
 
 if __name__ == '__main__':
