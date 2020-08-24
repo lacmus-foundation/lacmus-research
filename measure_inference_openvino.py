@@ -35,6 +35,18 @@ def parse_args(args):
         type=str,
         required=True
     )
+    parser.add_argument(
+        '--device_str',
+        help='Argument to pass as device name when loading network. Pass "all" to run all options',
+        type=str,
+        required=True,
+        default="CPU"
+    )
+    parser.add_argument(
+        '--print_detections',
+        help='Whether to print detections',
+        action='store_true'
+    )
 
     return parser.parse_args(args)
 
@@ -176,9 +188,10 @@ def prepare_image(image, width, height):
     image = np.expand_dims(image, axis=0)
     return image, scale
 
-def measure_simple_inference(images_list, model_xml, model_bin, input_key='input_1'):
+def measure_simple_inference(
+        images_list, model_xml, model_bin, device_str, print_detections, input_key='input_1'):
     core = IECore()
-    core.set_config({"CPU_BIND_THREAD": "YES"}, "CPU")
+    #core.set_config({"CPU_BIND_THREAD": "YES"}, "CPU")
     net = core.read_network(model=model_xml, weights=model_bin)
     net.batch_size = 1
     output = next(iter(net.outputs))
@@ -186,7 +199,7 @@ def measure_simple_inference(images_list, model_xml, model_bin, input_key='input
     shape = net.input_info[input_key].input_data.shape
     _, _, height, width = shape
     config = {}
-    executable_net = core.load_network(network=net, config=config, device_name="CPU")
+    executable_net = core.load_network(network=net, config=config, device_name=device_str)
 
     load_time = 0.0
     preprocess_time = 0.0
@@ -214,12 +227,12 @@ def measure_simple_inference(images_list, model_xml, model_bin, input_key='input
 
     throughput_time = time.time() - start
 
-    for image_path in detections:
-        print_detections(image_path, detections[image_path], scales[image_path])
-        print()
+    if print_detections:
+        for image_path in detections:
+            print_detections(image_path, detections[image_path], scales[image_path])
+            print()
 
     img_count = len(images_list)
-    print('*' * 20)
     print('latency: {} sec per image'.format(latency_time/img_count))
     print('throughput: {} images per sec'.format(img_count / throughput_time))
     print('avg load time: {} s'.format(load_time / img_count))
@@ -232,6 +245,8 @@ def main(args=None):
     model_xml = args.xml
     model_bin = args.bin
     images_dir = args.img_dir
+    device_str = args.device_str
+    print_detections = args.print_detections
 
     if not args.img_list_path:
         images_names = [f for f in os.listdir(images_dir) if os.path.isfile(os.path.join(images_dir, f))]
@@ -240,7 +255,14 @@ def main(args=None):
             images_names = [img.strip() + '.jpg' for img in f.readlines()]
 
     images_list = [os.path.join(images_dir, img) for img in images_names]
-    measure_simple_inference(images_list, model_xml, model_bin)
+
+    if device_str.lower() == 'all':
+        for device in ['CPU', 'GPU', 'HETERO:GPU,CPU', 'HETERO:CPU,GPU', 'MULTI:CPU,GPU', 'MULTI:GPU,CPU']:
+            print("device_name:", device)
+            measure_simple_inference(images_list, model_xml, model_bin, device, print_detections)
+            print()
+    else:
+        measure_simple_inference(images_list, model_xml, model_bin, device_str, print_detections)
 
 
 if __name__ == '__main__':
