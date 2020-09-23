@@ -2,3 +2,9 @@
 .ipynb_checkpoints/
 
 **/logs
+
+.vscode
+test_data/
+data/
+
+*.h5
