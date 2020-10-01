@@ -8,3 +8,7 @@ test_data/
 data/
 
 *.h5
+*.pb
+*.tflite
+
+__pycache__/
