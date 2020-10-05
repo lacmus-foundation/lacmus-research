@@ -10,5 +10,8 @@ data/
 *.h5
 *.pb
 *.tflite
+*.xml
+*.bin
+*.mapping
 
 __pycache__/
