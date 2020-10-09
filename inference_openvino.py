@@ -88,7 +88,7 @@ def main(args=None):
     OutputLayer = next(iter(net.outputs))
     OpenVinoExecutable = OpenVinoIE.load_network(network=net, config=config, device_name="CPU")
 
-    input_blob = 'data_4'
+    input_blob = 'data_2'
     net.batch_size = 1
     _, _, h, w = net.inputs[input_blob].shape
     print(f'model input shape: {net.inputs[input_blob].shape}')
