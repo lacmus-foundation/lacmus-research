@@ -11,7 +11,7 @@
 
 
 |        Model                               |    Full   | Winter   | Spring   |  SummerM | SummerT  |
-|--------------------------------------------|-----------|----------|----------|----------|----------|               
+|--------------------------------------------|-----------|----------|----------|----------|----------|
 |resnet50_liza_alert_v1.h5                   |   0.5605  | 0.9565   | 0.2526   | 0.2734   | 0.5126   |
 |resnet50_liza_alert_prod.h5                 |	 0.7573  | 0.9614   | 0.8408   | 0.8902   | 0.5951   |
 |resnet50_pascal_20_ladd.h5                  |	 0.8443  | 0.9426   | 0.6823   | 0.7080   | 0.8345   |
@@ -34,10 +34,4 @@ SDD ds metric
 | torch, from CoCo                        | peds      | test    | no_resize |   -    | 0.2238 |   4   |
 | torch, from CoCo                        | peds      | val     | no_resize |   -    | 0.2914 |   8   |
 | torch, from CoCo                        | peds      | val     | 800,1333  |   -    | 0.3601 |   5   | 
-| torch, from CoCo, lr 0.005              | peds      | val     | 800,1333  |   -    | 0.3774 |   5   | 
-
-
-
-
-
-
+| torch, from CoCo, lr 0.005              | peds      | val     | 800,1333  |   -    | 0.3774 |   5   |
