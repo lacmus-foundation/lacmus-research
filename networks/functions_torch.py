@@ -258,7 +258,7 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq):
 @torch.no_grad()
 def evaluate(model, data_loader, device='cuda'):
     n_threads = torch.get_num_threads()
-    torch.set_num_threads(1)
+    torch.set_num_threads(1) # Does it nessesary? Who knows...
     cpu_device = torch.device("cpu")
     inference_res = []
     model.eval()

@@ -10,12 +10,18 @@
 
 
 
-|        Model                               |    Full   | Winter   | Spring   |  SummerM | SummerT  |
-|--------------------------------------------|-----------|----------|----------|----------|----------|
-|resnet50_liza_alert_v1.h5                   |   0.5605  | 0.9565   | 0.2526   | 0.2734   | 0.5126   |
-|resnet50_liza_alert_prod.h5                 |	 0.7573  | 0.9614   | 0.8408   | 0.8902   | 0.5951   |
-|resnet50_pascal_20_ladd.h5                  |	 0.8443  | 0.9426   | 0.6823   | 0.7080   | 0.8345   |
-|resnet50_pascal_15_1500_2000_ladd.h5        |   0.9356  | 0.9825   | 0.8956   | 0.8839   | 0.9315   |
+|        Model                             | size      |    Full   | Winter   | Spring   |  SummerM | SummerT  | comments  |
+|------------------------------------------|-----------|-----------|----------|----------|----------|----------|-----------|
+|resnet50_liza_alert_v1.h5                 |           |   0.5605  | 0.9565   | 0.2526   | 0.2734   | 0.5126   | |
+|resnet50_liza_alert_prod.h5               |           |   0.7573  | 0.9614   | 0.8408   | 0.8902   | 0.5951   | |
+|resnet50_pascal_20_ladd.h5                |           |   0.8443  | 0.9426   | 0.6823   | 0.7080   | 0.8345   | |
+|resnet50_pascal_15_1500_2000_ladd.h5      |           |   0.9356  | 0.9825   | 0.8956   | 0.8839   | 0.9315   | |
+|resnet50_LADD.pth (basic torch)		   | 1500,2000 |   0.8767  | 0.9595   | 0.6556   | 0.8053   | 0.8987   | *1  |
+|resnet50_LADD_epoch_8.pth (2 phase torch) | 1500,2000 |   0.8985  | 0.9731   | 0.7455   | 0.8067   | 0.9146   | *2  |
+
+---
+*1 Not tuned ancors, not train on empty images?, trainable_backbone_layers default = None
+*2 Not tuned ancors, not train on empty images?, train head, then head+backbone
 
 
 SDD ds metric
