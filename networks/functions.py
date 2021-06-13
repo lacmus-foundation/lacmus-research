@@ -39,15 +39,33 @@ def evaluate_res(
 ):
     """ Evaluate a given dataset using a given model.
     # Arguments
+        inference_res   : inference results for whole imageset List((target,prediction)),
+            where targets {'boxes':tensor[4,n], 'labels':tenson[n]},
+            prediction {'boxes':tensor[4,n], 'labels':tenson[n], scores: tensor[n]}
+            example:
+
+            [(({'boxes': tensor([[1321.8750,  274.6667, 1348.8750,  312.6667]]),
+                'labels': tensor([1])},),
+              [{'boxes': tensor([[1323.5446,  275.2711, 1350.2203,  315.9069],
+                        [ 119.2671, 1227.5459,  171.1528, 1277.9830],
+                        [ 240.5078, 1147.3656,  270.7879, 1205.0126],
+                        [ 140.9097, 1231.9814,  173.9967, 1285.4724]]),
+                'scores': tensor([0.9568, 0.3488, 0.1418, 0.0771]),
+                'labels': tensor([1, 1, 1, 1])}]),
+             (({'boxes': tensor([[ 798.7500, 1357.3334,  837.7500, 1396.6666],
+                        [ 829.1250,  777.3333,  873.3750,  818.0000],
+                        [ 886.5000,   34.6667,  916.5000,   77.3333]]),
+                'labels': tensor([1, 1, 1])},),
+              [{'boxes': tensor([[ 796.5808, 1354.9255,  836.5349, 1395.8972],
+                        [ 828.8597,  777.9426,  872.5923,  819.8660],
+                        [ 887.7839,   37.1435,  914.8092,   76.3933]]),
+                'scores': tensor([0.9452, 0.8701, 0.8424]),
+                'labels': tensor([1, 1, 1])}])]
+
         iou_threshold   : The threshold used to consider when a detection is positive or negative.
         score_threshold : The score confidence threshold to use for detections.
         max_detections  : The maximum number of detections to use per image.
     """
-    # gather all detections and annotations
-#     all_detections, all_inferences = \
-#         _get_detections(generator, model, score_threshold=score_threshold, max_detections=max_detections, save_path=save_path)
-#     all_annotations    = _get_annotations(generator)
-#     average_precisions = {}
 
     false_positives = np.zeros((0,))
     true_positives  = np.zeros((0,))
@@ -81,6 +99,11 @@ def evaluate_res(
                     false_positives = np.append(false_positives, 1)
                     true_positives  = np.append(true_positives, 0)
 
+    # F1@IoU
+    plain_recall = np.sum(true_positives)/num_annotations
+    plain_precision = np.sum(true_positives) / np.maximum(np.sum(true_positives) + np.sum(false_positives), np.finfo(np.float64).eps)
+    F1 = 2*plain_precision*plain_recall/(plain_precision+plain_recall)
+
 
 #     # sort by score
     indices         = np.argsort(-scores)
@@ -90,7 +113,6 @@ def evaluate_res(
 #     # compute false positives and true positives
     false_positives = np.cumsum(false_positives)
     true_positives  = np.cumsum(true_positives)
-
 #     # compute recall and precision
     recall    = true_positives / num_annotations
     precision = true_positives / np.maximum(true_positives + false_positives, np.finfo(np.float64).eps)
@@ -99,4 +121,4 @@ def evaluate_res(
     average_precision  = _compute_ap(recall, precision)
 
 
-    return average_precision
+    return (average_precision, F1)
