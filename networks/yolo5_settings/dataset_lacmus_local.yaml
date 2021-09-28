@@ -1,0 +1,10 @@
+
+train: ../../../git/lacmus-research/networks/data/images/train
+val: ../../../git/lacmus-research/networks/data/images/valid
+
+
+
+# Classes
+nc: 1  # number of classes
+names: ['person']  # class names
+
