@@ -23,12 +23,19 @@ LADD dataset
 |yolo5_5th_place_retrain(50 epochs)        | 1984,1984 |   0.9479  | 0.9843   | 0.7866   | 0.9255   | 0.9701   | |
 |yolo5_5th_place_git_weights               | 1984,1984 |   0.9578  | 0.9833   | 0.8192   | 0.9474   | 0.9799   | *4  |
 
+LADD dataset + summer_nnovgorod_2021
+
+|        Model                             | size      |    Full   | Winter   | Spring   |  SummerM | SummerT  | 2021_NN_mix | comments  |
+|------------------------------------------|-----------|-----------|----------|----------|----------|----------|-------------|-----------|
+|yolo5_5th_place_retrain(50) with 2021 DS  | 1984,1984 |  0.9223   | 0.9843   | 0.7905   | 0.9420   |  0.9183  | 0.4121      |   |
+|resnet50_FRCNN_LADD_epoch_9.pth           | 1500,2000 |  0.8665   | 0.9801   | 0.7813   | 0.8747   |  0.9183  | 0.1491      |*5 |
+
 ---
 *1 Not tuned ancors, not train on empty images?, trainable_backbone_layers default = None
 *2 Not tuned ancors, not train on empty images (train SDD->head->head+backbone)
 *3 Faster RCNN with the same parameters as retina (train SDD->head->head+backbone)
 *4 Weights form https://github.com/vazhanio/Lacmus_5place
-
+*5 The model haven't seen training part of this DS
 
 SDD ds metric
 
