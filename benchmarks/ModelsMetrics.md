@@ -1,13 +1,26 @@
-old metrics
-|        Model                               |    Full   | Winter   |   Summer |   Spring |
-|--------------------------------------------|-----------|----------|----------|----------|               
-|resnet50_base_best.h5                       |   0.0023  |  0.0054  |  0.0005  |  0.0000  |
-|resnet50_liza_alert_v1.h5                   |   0.6253  |  0.9565  |  0.3242  |  0.2544  |
-|laddv4_summer_epoch2.h5                     |   0.5721  |  0.6705  |  0.7805  |  0.2005  |
-|laddv4_summer_epoch10.h5                    |   0.5744  |  0.5988  |  0.8977  |  0.1632  |
-|finetuning_800_1333_e7.h5                   |   0.9221  |  0.9671  |  0.8915  |  0.8526  |
-|resnet50_2000_1500_inference.h5 (2000x1500) |   0.9536  |  0.9792  |  0.9228  |  0.9147  |
-|mobilenet_v3_small_pascal_07.h5 (1635x981)  |   0.6923  |  0.6302  |  0.8079  |  0.7018  |
+LADD + IPSAR
+
+test metrics
+|               Model          | train on | mAp LADD | pres LADD | rec LADD | mAp IPSAR | pres IPSAR | rec IPSAR |
+|------------------------------|----------|----------|-----------|----------|-----------|------------|-----------|
+| yolo5_prod                   | LADD+NN  | 0.909    | 0.615     | 0.929    |           |            |           |
+
+
+train metrics
+|               Model          | train on | mAp LADD | pres LADD | rec LADD | mAp IPSAR | pres IPSAR | rec IPSAR |
+|------------------------------|----------|----------|-----------|----------|-----------|------------|-----------|
+| yolo5_prod                   | LADD+NN  | 0.922    | 0.778     |  0.928   |           |            |           |
+
+
+
+
+LADD dataset + summer_nnovgorod_2021
+
+|        Model                             | size      |    Full   | Winter   | Spring   |  SummerM | SummerT  | 2021_NN_mix | comments  |
+|------------------------------------------|-----------|-----------|----------|----------|----------|----------|-------------|-----------|
+|yolo5_5th_place_retrain(50) with 2021 DS  | 1984,1984 |  0.9223   | 0.9843   | 0.7905   | 0.9420   |  0.9183  | 0.4121      |   |
+|resnet50_FRCNN_LADD_epoch_9.pth           | 1500,2000 |  0.8665   | 0.9801   | 0.7813   | 0.8747   |  0.9183  | 0.1491      |*5 |
+
 
 LADD dataset
 
@@ -23,12 +36,6 @@ LADD dataset
 |yolo5_5th_place_retrain(50 epochs)        | 1984,1984 |   0.9479  | 0.9843   | 0.7866   | 0.9255   | 0.9701   | |
 |yolo5_5th_place_git_weights               | 1984,1984 |   0.9578  | 0.9833   | 0.8192   | 0.9474   | 0.9799   | *4  |
 
-LADD dataset + summer_nnovgorod_2021
-
-|        Model                             | size      |    Full   | Winter   | Spring   |  SummerM | SummerT  | 2021_NN_mix | comments  |
-|------------------------------------------|-----------|-----------|----------|----------|----------|----------|-------------|-----------|
-|yolo5_5th_place_retrain(50) with 2021 DS  | 1984,1984 |  0.9223   | 0.9843   | 0.7905   | 0.9420   |  0.9183  | 0.4121      |   |
-|resnet50_FRCNN_LADD_epoch_9.pth           | 1500,2000 |  0.8665   | 0.9801   | 0.7813   | 0.8747   |  0.9183  | 0.1491      |*5 |
 
 ---
 *1 Not tuned ancors, not train on empty images?, trainable_backbone_layers default = None
@@ -54,3 +61,15 @@ SDD ds metric
 | torch, from CoCo                        | peds      | val     | no_resize |   -    | 0.2914 |   8   |
 | torch, from CoCo                        | peds      | val     | 800,1333  |   -    | 0.3601 |   5   | 
 | torch, from CoCo, lr 0.005              | peds      | val     | 800,1333  |   -    | 0.3774 |   5   |
+
+old metrics
+|        Model                               |    Full   | Winter   |   Summer |   Spring |
+|--------------------------------------------|-----------|----------|----------|----------|               
+|resnet50_base_best.h5                       |   0.0023  |  0.0054  |  0.0005  |  0.0000  |
+|resnet50_liza_alert_v1.h5                   |   0.6253  |  0.9565  |  0.3242  |  0.2544  |
+|laddv4_summer_epoch2.h5                     |   0.5721  |  0.6705  |  0.7805  |  0.2005  |
+|laddv4_summer_epoch10.h5                    |   0.5744  |  0.5988  |  0.8977  |  0.1632  |
+|finetuning_800_1333_e7.h5                   |   0.9221  |  0.9671  |  0.8915  |  0.8526  |
+|resnet50_2000_1500_inference.h5 (2000x1500) |   0.9536  |  0.9792  |  0.9228  |  0.9147  |
+|mobilenet_v3_small_pascal_07.h5 (1635x981)  |   0.6923  |  0.6302  |  0.8079  |  0.7018  |
+
