@@ -1,6 +1,6 @@
 
-train: ../../../git/lacmus-research/networks/data/images/train
-val: ../../../git/lacmus-research/networks/data/images/valid
+train: ../../../lacmus-research/networks/data/images/train
+val: ../../../lacmus-research/networks/data/images/valid
 
 
 
