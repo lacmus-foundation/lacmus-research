@@ -1,0 +1,1 @@
+This folder is for analizing and comparing different chunks of lacmus and 3rd party datasets

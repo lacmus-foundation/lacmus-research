@@ -4,13 +4,13 @@ test metrics
 |               Model          | train on | mAp LADD | pres LADD | rec LADD | mAp IPSAR | pres IPSAR | rec IPSAR |
 |------------------------------|----------|----------|-----------|----------|-----------|------------|-----------|
 | yolo5_prod_v1                | LADD+NN  | 0.909    | 0.615     | 0.929    |  0.484    | 0.430      | 0.626     |
-
+| yolo5_test_on_LADD_and_IPSAR | all      | 0.898    | 0.556     | 0.926    |  0.714    | 0.641      | 0.742     |
 
 train metrics
 |               Model          | train on | mAp LADD | pres LADD | rec LADD | mAp IPSAR | pres IPSAR | rec IPSAR |
 |------------------------------|----------|----------|-----------|----------|-----------|------------|-----------|
 | yolo5_prod_v1                | LADD+NN  | 0.922    | 0.778     |  0.928   | 0.518     | 0.259      | 0.738     |
-
+| yolo5_test_on_LADD_and_IPSAR | all      | 0.900    | 0.688     |  0.912   | 0.926     | 0.656      | 0.960     |
 
 
 
