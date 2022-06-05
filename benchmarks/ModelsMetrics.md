@@ -1,20 +1,23 @@
-LADD + IPSAR
+Compare training on LADD + IPSAR
 
 test metrics
-|               Model          | train on | mAp LADD | pres LADD | rec LADD | mAp IPSAR | pres IPSAR | rec IPSAR |
-|------------------------------|----------|----------|-----------|----------|-----------|------------|-----------|
-| yolo5_prod_v1                | LADD+NN  | 0.909    | 0.615     | 0.929    |  0.484    | 0.430      | 0.626     |
-| yolo5_test_on_LADD_and_IPSAR | all      | 0.898    | 0.556     | 0.926    |  0.714    | 0.641      | 0.742     |
+|               Model          | epochs | train on | mAp LADD | pres LADD | rec LADD | mAp IPSAR | pres IPSAR | rec IPSAR |
+|------------------------------|--------|----------|----------|-----------|----------|-----------|------------|-----------|
+| yolo5_prod_v1                | 50     | LADD+NN  | 0.909    | 0.615     | 0.929    |  0.484    | 0.430      | 0.626     |
+| yolo5_test_on_LADD_and_IPSAR | 70     | all      | 0.908    | 0.587     | 0.934    |  0.715    | 0.727      | 0.742     |
+| yolo5_test_on_IPSAR          | 70     | IPSAR    | 0.603    | 0.560     | 0.684    |  0.696    | 0.724      | 0.718     |
+
 
 train metrics
-|               Model          | train on | mAp LADD | pres LADD | rec LADD | mAp IPSAR | pres IPSAR | rec IPSAR |
-|------------------------------|----------|----------|-----------|----------|-----------|------------|-----------|
-| yolo5_prod_v1                | LADD+NN  | 0.922    | 0.778     |  0.928   | 0.518     | 0.259      | 0.738     |
-| yolo5_test_on_LADD_and_IPSAR | all      | 0.900    | 0.688     |  0.912   | 0.926     | 0.656      | 0.960     |
+|               Model          | epochs | train on | mAp LADD | pres LADD | rec LADD | mAp IPSAR | pres IPSAR | rec IPSAR |
+|------------------------------|--------|----------|----------|-----------|----------|-----------|------------|-----------|
+| yolo5_prod_v1                | 50     | LADD+NN  | 0.922    | 0.778     |  0.928   | 0.518     | 0.259      | 0.738     |
+| yolo5_test_on_LADD_and_IPSAR | 70     | all      | 0.908    | 0.710     |  0.918   | 0.940     | 0.708      | 0.964     |
+| yolo5_test_on_IPSAR          | 70     | IPSAR    | 0.591    | 0.611     |  0.665   | 0.943     | 0.687      | 0.970     |
 
 
 
-LADD dataset + summer_nnovgorod_2021
+LADD dataset + summer_nnovgorod_2021 - compare yolov5 and FRCNN (on mAp@0.5)
 
 |        Model                             | size      |    Full   | Winter   | Spring   |  SummerM | SummerT  | 2021_NN_mix | comments  |
 |------------------------------------------|-----------|-----------|----------|----------|----------|----------|-------------|-----------|
@@ -22,7 +25,7 @@ LADD dataset + summer_nnovgorod_2021
 |resnet50_FRCNN_LADD_epoch_9.pth           | 1500,2000 |  0.8665   | 0.9801   | 0.7813   | 0.8747   |  0.9183  | 0.1491      |*5 |
 
 
-LADD dataset
+LADD dataset - compare different architectures (on LADD without summer_nnovgorod_2021 chunk on mAp@0.5)
 
 |        Model                             | size      |    Full   | Winter   | Spring   |  SummerM | SummerT  | comments  |
 |------------------------------------------|-----------|-----------|----------|----------|----------|----------|-----------|
