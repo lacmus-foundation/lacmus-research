@@ -1,5 +1,5 @@
 <b>Multimodel Deep Learning for Person Detection in Aerial Images</b>, <i>статья от 7го сентября 2020го, авторы Vladan Papić (University of Split), Mirela Kundid Vasić
-(University of Mostar)</i>. <a href=https://www.researchgate.net/publication/344269970_Multimodel_Deep_Learning_for_Person_Detection_in_Aerial_Images>Оригинал на ResearchGate</a>. 
+(University of Mostar)</i>. <a href="https://www.researchgate.net/publication/344269970_Multimodel_Deep_Learning_for_Person_Detection_in_Aerial_Images">Оригинал на ResearchGate</a>. 
 
 Рассматривают two-stage подходы к детектированию людей на снимках с высоты, называя это multimodel.
 Помимо основной темы можно вкратце коснуться замечаний:
@@ -31,6 +31,6 @@
 Возможно, с ними стоит бороться отдельно - например отфильтровывая найденные детекты, например, как предложено в статье, анализируя контектстную информацию/окружающий регион или фильтруя по каким-либо вычисленным статистикам. 
 Если обучать/инференсить на кропах, тоже можно, мне кажется применять отфильтровывание easy background по быстро вычисленным показателям каких-либо статистики. 
 
-Подход с two-stage detectors, однако, имеет слишком долгое временя работы - в татье на обработку одного изображения уходило около 15 секунд (у "старых методов" - 43с).
+Подход с two-stage detectors, однако, имеет слишком долгое время работы - в cтатье на обработку одного изображения уходило около 15 секунд (у "старых методов" - 43с).
 Указания, использовалось CPU или GPU, нет, хотя характеристики приведены: Intel Xeon E5-2640v4 of 3.40 GHz, 4×16 GB DDR4 memory, and multi-GPU 4×NVIDIAGeForce GTX 1080Ti Turbo with 11 GB memory.
 Изображения обрабатывались в полном масштабе, с разрезанием изначального фото 4000х3000 на блоки 500х500 px с горизонтальным перекрытием 100 и вертикальным 200.
